@@ -65,8 +65,9 @@ public class AsyncAssertListener implements ISuiteListener {
     }
 
     private void moveResultToFailed(final ITestContext context, final ITestResult iTestResult) {
-        iTestResult.setStatus(ITestResult.FAILURE);
-        if (!context.getFailedTests().getAllResults().contains(iTestResult)) {
+        if (!context.getFailedTests().getAllResults().contains(iTestResult) &&
+                !context.getSkippedTests().getAllResults().contains(iTestResult)) {
+            iTestResult.setStatus(ITestResult.FAILURE);
             context.getPassedTests().removeResult(iTestResult);
             context.getFailedTests().addResult(iTestResult, iTestResult.getMethod());
         }

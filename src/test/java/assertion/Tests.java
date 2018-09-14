@@ -14,16 +14,16 @@ public class Tests {
 
         Assert.assertTrue(AsyncAssert.getAssertRecords().stream().anyMatch(r -> r.getTestId().contains("success")),
                 "No res in table after AAssert creation.");
-        Assert.assertTrue(AsyncAssert.getAssertRecords().stream()
+        Assert.assertTrue(!AsyncAssert.getAssertRecords().stream()
                         .filter(r -> r.getTestId().contains("success"))
                         .map(r -> r.isSuccess())
-                        .findFirst().get() == false,
+                        .findFirst().get(),
                 "Wait not complete but result already received!");
-        uglyDelay(5000);
+        uglyDelay(10000);
         Assert.assertTrue(AsyncAssert.getAssertRecords().stream()
                         .filter(r -> r.getTestId().contains("success"))
                         .map(r -> r.isSuccess())
-                        .findFirst().get() == true,
+                        .findFirst().get(),
                 "Wait complete but result not successful");
     }
 
@@ -34,10 +34,12 @@ public class Tests {
             return "response data bad";
         }, data -> Assert.assertEquals(data, "response data"));
         uglyDelay(5000);
-        Assert.assertTrue(AsyncAssert.getAssertRecords().stream()
+        Assert.assertTrue(AsyncAssert.getAssertRecords().stream().anyMatch(r -> r.getTestId().contains("fail")),
+                "No res in table after AAssert creation.");
+        Assert.assertTrue(!AsyncAssert.getAssertRecords().stream()
                         .filter(r -> r.getTestId().contains("fail"))
                         .map(r -> r.isSuccess())
-                        .findFirst().get() == false,
+                        .findFirst().get(),
                 "Wait complete but result not successful");
     }
 
