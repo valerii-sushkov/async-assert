@@ -20,11 +20,12 @@ public class AsyncAssertListener implements ISuiteListener {
     @Override
     public void onFinish(final ISuite iSuite) {
         AsyncAssert.executorShutDown();
-        iSuite.getResults().entrySet().stream().forEach(e -> onFinish1(e.getValue().getTestContext()));
+        iSuite.getResults().entrySet().stream()
+                .forEach(suiteResult -> updateSuiteTestsData(suiteResult.getValue().getTestContext()));
 
     }
 
-    public void onFinish1(final ITestContext context) {
+    public void updateSuiteTestsData(final ITestContext context) {
         AsyncAssert.getAssertRecords().stream().forEach(rec -> {
             if (rec.isSuccess()) {
                 for (ITestResult res : Iterables.concat(context.getPassedTests().getAllResults(),

@@ -42,7 +42,7 @@ public class AsyncAssert {
     }
 
     public static String idGenerator(final ITestResult result) {
-        return result.getInstance().toString() + ":" + result.getParameters();
+        return result.getInstance().toString() + "." + result.getName() + "(" + result.getParameters() + ")";
     }
 
     public static <T> void aAssert(final String description, final Supplier<T> waitSupplier,
@@ -72,7 +72,7 @@ public class AsyncAssert {
         });
     }
 
-    public static <T> Supplier<T> supplierBox(final Supplier<T> waitSupplier, final AssertRecord rec) {
+    private static <T> Supplier<T> supplierBox(final Supplier<T> waitSupplier, final AssertRecord rec) {
         return () -> {
             try {
                 return waitSupplier.get();
