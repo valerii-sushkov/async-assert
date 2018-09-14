@@ -30,18 +30,14 @@ public class Tests {
     @Test
     public void fail() {
         AsyncAssert.aAssert("Some description fail", () -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            uglyDelay(1000);
             return "response data bad";
         }, data -> Assert.assertEquals(data, "response data"));
         uglyDelay(5000);
         Assert.assertTrue(AsyncAssert.getAssertRecords().stream()
-                        .filter(r -> r.getTestId().contains("success"))
+                        .filter(r -> r.getTestId().contains("fail"))
                         .map(r -> r.isSuccess())
-                        .findFirst().get() == true,
+                        .findFirst().get() == false,
                 "Wait complete but result not successful");
     }
 
