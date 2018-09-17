@@ -1,48 +1,105 @@
 package assertion;
 
-
+/**
+ * Class container of assert result information.
+ * This data than mowed to lister for updating or actual result.
+ *
+ */
 public class AssertRecord {
+    /**
+     * id of test case.
+     */
     private String testId;
+    /**
+     * description of test case.
+     */
     private String description;
+    /**
+     * success of test case.
+     */
     private boolean isSuccess;
+    /**
+     * exception of test case.
+     */
     private Error exception;
 
-    public AssertRecord(final String testId, final String description, final boolean isSuccess, final Error exception) {
-        this.testId = testId;
-        this.description = description;
-        this.isSuccess = isSuccess;
-        this.exception = exception;
+
+    /**
+     * Construct new record.
+     * @param recTestId - id generated for current test.
+     * @param recDescription - text describing current verification
+     * @param success - is assert was successful.
+     * @param recException - error throw by verification.
+     */
+    public AssertRecord(final String recTestId, final String recDescription,
+                        final boolean success, final Error recException) {
+        setTestId(recTestId);
+        setDescription(recDescription);
+        setSuccess(success);
+        setException(recException);
     }
 
-    public String getTestId() {
+    /**
+     * Getter for testId.
+     * @return - id of test in record.
+     */
+    public final String getTestId() {
         return testId;
     }
 
-    public void setTestId(final String testId) {
-        this.testId = testId;
+    /**
+     * Setter of testId.
+     * @param recordTestId - id of test in record.
+     */
+    public final void setTestId(final String recordTestId) {
+        testId = recordTestId;
     }
 
-    public String getDescription() {
+    /**
+     * Getter for description.
+     * @return - description of test in record.
+     */
+    public final String getDescription() {
         return description;
     }
 
-    public void setDescription(final String description) {
-        this.description = description;
+    /**
+     * Setter of description.
+     * @param recordDescription - description of test in record.
+     */
+    public final void setDescription(final String recordDescription) {
+        description = recordDescription;
     }
 
-    public boolean isSuccess() {
+    /**
+     * Getter for isSuccess.
+     * @return - isSuccess of test in record.
+     */
+    public final boolean isSuccess() {
         return isSuccess;
     }
 
-    public void setSuccess(final boolean success) {
+    /**
+     * Setter of isSuccess.
+     * @param success - isSuccess of test in record.
+     */
+    public final void setSuccess(final boolean success) {
         isSuccess = success;
     }
 
-    public Error getException() {
+    /**
+     * Getter for isSuccess.
+     * @return - isSuccess of test in record.
+     */
+    public final Error getException() {
         return exception;
     }
 
-    public void setException(final Error exception) {
-        this.exception = exception;
+    /**
+     * Setter of exception.
+     * @param recordException - exception of test in record.
+     */
+    public final void setException(final Error recordException) {
+        exception = recordException;
     }
 }
