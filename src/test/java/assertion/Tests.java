@@ -7,10 +7,9 @@ public class Tests {
 
     @Test
     public void success() {
-        AsyncAssert.aAssert("Some description", () -> {
-            uglyDelay(5000);
-            return "response data";
-        }, data -> Assert.assertEquals(data, "response data"));
+        AsyncAssert.aAssert("Some description",
+                TestDataHelper.waitAndGetStrData(5000, "response data"),
+                TestDataHelper.verifyDataEquals("response data"));
 
         Assert.assertTrue(AsyncAssert.getAssertRecords().stream().anyMatch(r -> r.getTestId().contains("success")),
                 "No res in table after AAssert creation.");
@@ -29,10 +28,9 @@ public class Tests {
 
     @Test
     public void fail() {
-        AsyncAssert.aAssert("Some description fail", () -> {
-            uglyDelay(1000);
-            return "response data bad";
-        }, data -> Assert.assertEquals(data, "response data"));
+        AsyncAssert.aAssert("Some description fail",
+                TestDataHelper.waitAndGetStrData(1000, "response data bad"),
+                TestDataHelper.verifyDataEquals("response data"));
         uglyDelay(5000);
         Assert.assertTrue(AsyncAssert.getAssertRecords().stream().anyMatch(r -> r.getTestId().contains("fail")),
                 "No res in table after AAssert creation.");
@@ -43,7 +41,7 @@ public class Tests {
                 "Wait complete but result not successful");
     }
 
-    private void uglyDelay(long delay) {
+    private void uglyDelay(final long delay) {
         try {
             Thread.sleep(delay);
         } catch (InterruptedException e) {

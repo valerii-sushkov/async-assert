@@ -26,11 +26,12 @@ public class TestDataHelper {
         };
     }
 
-    public Consumer<String> verifyDataIsPresent() {
+    public static Consumer<String> verifyDataIsPresent() {
         return data -> Assert.assertNotNull(data, "Data not detected while expected!");
     }
 
-    public Consumer<String> verifyDataEquals(final String expectedData) {
+    public static Consumer<String> verifyDataEquals(final String expectedData) {
+        verifyDataIsPresent();
         return data -> Assert.assertEquals(data, expectedData, "Data not detected while expected!");
     }
 }
