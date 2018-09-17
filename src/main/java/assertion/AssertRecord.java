@@ -7,7 +7,7 @@ public class AssertRecord {
     private boolean isSuccess;
     private Error exception;
 
-    public AssertRecord(String testId, String description, boolean isSuccess, Error exception) {
+    public AssertRecord(final String testId, final String description, final boolean isSuccess, final Error exception) {
         this.testId = testId;
         this.description = description;
         this.isSuccess = isSuccess;
@@ -18,7 +18,7 @@ public class AssertRecord {
         return testId;
     }
 
-    public void setTestId(String testId) {
+    public void setTestId(final String testId) {
         this.testId = testId;
     }
 
@@ -26,7 +26,7 @@ public class AssertRecord {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -34,7 +34,7 @@ public class AssertRecord {
         return isSuccess;
     }
 
-    public void setSuccess(boolean success) {
+    public void setSuccess(final boolean success) {
         isSuccess = success;
     }
 
@@ -42,7 +42,7 @@ public class AssertRecord {
         return exception;
     }
 
-    public void setException(Error exception) {
+    public void setException(final Error exception) {
         this.exception = exception;
     }
 }

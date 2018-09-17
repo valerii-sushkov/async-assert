@@ -108,7 +108,7 @@ public class AsyncAssert {
         return copyList;
     }
 
-    public static void setMaxTimeout(long maxTimeout) {
-        maxTimeout = maxTimeout;
+    public static void setMaxTimeout(final long maxTimeOut) {
+        maxTimeout = maxTimeOut;
     }
 }

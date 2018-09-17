@@ -10,6 +10,10 @@
 
   <name>asyncAssert</name>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
   <build>
     <pluginManagement>
       <plugins>
@@ -41,6 +45,19 @@
             </properties>
             <reportFormat>plain</reportFormat>
           </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>3.0.0</version>
+          <configuration>
+            <configLocation>checkstyle.xml</configLocation>
+            <consoleOutput>true</consoleOutput>
+            <failsOnError>true</failsOnError>
+          </configuration>
+          <goals>
+            <goal>check</goal>
+          </goals>
         </plugin>
       </plugins>
     </pluginManagement>

@@ -30,7 +30,7 @@ public class TestDataHelper {
         return data -> Assert.assertNotNull(data, "Data not detected while expected!");
     }
 
-    public static Consumer<String> verifyDataEquals(final String expectedData) {
+    public static Consumer<String> verifyDataEquals(String expectedData) {
         verifyDataIsPresent();
         return data -> Assert.assertEquals(data, expectedData, "Data not detected while expected!");
     }
