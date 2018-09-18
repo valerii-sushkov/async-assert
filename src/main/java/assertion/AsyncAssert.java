@@ -5,6 +5,7 @@ import org.testng.ITestResult;
 import org.testng.Reporter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -15,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Class for creation async asserts and manage theirs waiting.
@@ -141,11 +143,15 @@ public final class AsyncAssert {
      * @return text.
      */
     protected static String idGenerator(final ITestResult result) {
+        String params = result.getParameters() == null ? "" :
+                Arrays.asList(result.getParameters())
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(";"));
         return String.format("%s.%s(%s)",
                 result.getInstance().toString(),
                 result.getName(),
-                result.getParameters());
-
+                params);
     }
 
     /**

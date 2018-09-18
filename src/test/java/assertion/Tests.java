@@ -1,6 +1,7 @@
 package assertion;
 
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class Tests {
@@ -26,8 +27,8 @@ public class Tests {
                 "Wait complete but result not successful");
     }
 
-    @Test
-    public void fail() {
+    @Test(dataProvider = "testDataProvider")
+    public void fail(final int number, final String smth) {
         AsyncAssert.aAssert("Some description fail",
                 TestDataHelper.waitAndGetStrData(1000, "response data bad"),
                 TestDataHelper.verifyDataEquals("response data"));
@@ -47,5 +48,10 @@ public class Tests {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @DataProvider
+    public static Object[][] testDataProvider() {
+        return new Object[][] {{1, "a"}, {2, "b"}};
     }
 }
