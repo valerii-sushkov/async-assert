@@ -23,6 +23,11 @@ public class AssertRecord {
      */
     private Error exception;
 
+    /**
+     * is request for this record already processed.
+     */
+    private boolean isComplete;
+
 
     /**
      * Construct new record.
@@ -37,6 +42,7 @@ public class AssertRecord {
         setDescription(recDescription);
         setSuccess(success);
         setException(recException);
+        setComplete(false);
     }
 
     /**
@@ -101,5 +107,21 @@ public class AssertRecord {
      */
     public final void setException(final Error recordException) {
         exception = recordException;
+    }
+
+    /**
+     * Getter for isComplete.
+     * @return - isComplete of test in record.
+     */
+    public final boolean isComplete() {
+        return isComplete;
+    }
+
+    /**
+     * Setter of isComplete.
+     * @param recordIsComplete -  Is request  already complete.
+     */
+    public final void setComplete(final boolean recordIsComplete) {
+        isComplete = recordIsComplete;
     }
 }
