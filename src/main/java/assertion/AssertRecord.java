@@ -24,6 +24,16 @@ public class AssertRecord {
     private Error exception;
 
     /**
+     * is test case Complete.
+     */
+    private boolean isComplete;
+
+    /**
+     * is test case Processed.
+     */
+    private boolean isProcessed;
+
+    /**
      * Construct new record.
      * @param recTestId - id generated for current test.
      * @param recDescription - text describing current verification
@@ -36,6 +46,8 @@ public class AssertRecord {
         setDescription(recDescription);
         setSuccess(success);
         setException(recException);
+        setComplete(false);
+        setProcessed(false);
     }
 
     /**
@@ -102,4 +114,35 @@ public class AssertRecord {
         exception = recordException;
     }
 
+    /**
+     * Setter of isComplete.
+     * @return - isComplete of test in record.
+     */
+    public final boolean isComplete() {
+        return isComplete;
+    }
+
+    /**
+     * Setter of isComplete.
+     * @param isRecordComplete - complete of test in record.
+     */
+    public final void setComplete(final boolean isRecordComplete) {
+        isComplete = isRecordComplete;
+    }
+
+    /**
+     * Setter of isProcessed.
+     * @return - isProcessed of test in record.
+     */
+    public final boolean isProcessed() {
+        return isProcessed;
+    }
+
+    /**
+     * Setter of isProcessed.
+     * @param isRecordProcessed - isProcessed of test in record.
+     */
+    public final void setProcessed(final boolean isRecordProcessed) {
+        isProcessed = isRecordProcessed;
+    }
 }

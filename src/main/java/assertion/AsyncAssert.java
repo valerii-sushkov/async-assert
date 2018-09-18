@@ -129,6 +129,8 @@ public final class AsyncAssert {
                         ex.printStackTrace();
                         error.setStackTrace(ex.getStackTrace());
                         rec.setException(error);
+                    } finally {
+                        rec.setComplete(true);
                     }
                 });
     }

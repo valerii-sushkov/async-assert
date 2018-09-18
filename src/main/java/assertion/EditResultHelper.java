@@ -26,12 +26,15 @@ public final class EditResultHelper {
     }
 
     /**
-     * Update test cases results.
+     * Update test cases results, after all cases complete.
      * @param context - test context of suite.
      */
     public static void updateSuiteTestsData(final ITestContext context) {
+        LOGGER.info("Start post processing of tests with async asserts.");
         AsyncAssert.getAssertRecords().stream()
+                .filter(rec -> !rec.isProcessed())
                 .forEach(rec -> {
+                    rec.setProcessed(true);
                     if (rec.isSuccess()) {
                         for (ITestResult res : Iterables.concat(
                                 context.getPassedTests().getAllResults(),
@@ -55,6 +58,33 @@ public final class EditResultHelper {
                                 break;
                             }
                         }
+                    }
+                });
+        LOGGER.info("Post processing of tests with async asserts complete.");
+    }
+
+    /**
+     * Update test cases results after test case is complete,
+     * if results is ready.
+     * @param iTestResult - test result.
+     */
+    public static void updateTestsData(final ITestResult iTestResult) {
+        AsyncAssert.getAssertRecords().stream()
+                .filter(rec -> !rec.isProcessed())
+                .filter(AssertRecord::isComplete)
+                .filter(rec -> AsyncAssert.idGenerator(iTestResult)
+                        .equals(rec.getTestId()))
+                .findFirst()
+                .ifPresent(rec -> {
+                    rec.setProcessed(true);
+                    if (rec.isSuccess()) {
+                        reportSuccess(iTestResult, rec);
+                    } else {
+                        reportFail(iTestResult, rec);
+                        addErrorThrowable(iTestResult, rec);
+                        updateThrowable(iTestResult, rec);
+                        moveResultToFailed(iTestResult.getTestContext(),
+                                iTestResult);
                     }
                 });
     }
@@ -113,12 +143,12 @@ public final class EditResultHelper {
         String failMessage = "Verification of \""
                 + record.getDescription() + "\" is Failed!!!";
         if (iTestResult.getThrowable() != null) {
-            Throwable thr1 = new Throwable(failMessage
+            AssertionError thr1 = new AssertionError(failMessage
                     + "; " + iTestResult.getThrowable().getMessage());
             thr1.setStackTrace(iTestResult.getThrowable().getStackTrace());
             iTestResult.setThrowable(thr1);
         } else {
-            Throwable thr1 = new Throwable(failMessage);
+            AssertionError thr1 = new AssertionError(failMessage);
             thr1.setStackTrace(record.getException().getStackTrace());
             iTestResult.setThrowable(thr1);
         }
