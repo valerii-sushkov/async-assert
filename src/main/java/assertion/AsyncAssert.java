@@ -78,16 +78,16 @@ public final class AsyncAssert {
      */
     public static <T> void aAssert(final Supplier<T> waitSupplier,
                                    final Consumer<T> action) {
-        String line = Reporter.getCurrentTestResult()
-                .getInstance().toString()
-                + "(" + Reporter.getCurrentTestResult()
-                .getMethod().getMethodName() + ")";
+        String line = String.format("%s(%s)",
+                Reporter.getCurrentTestResult().getInstance().toString(),
+                Reporter.getCurrentTestResult().getMethod().getMethodName());
         final String finalLine = line;
         if (getAssertRecords().stream()
                 .anyMatch(rec -> rec.getDescription().equals(finalLine))) {
-            line = line + "[" + (getAssertRecords().stream()
+            line =  String.format("%s[%s]", line,
+                    (getAssertRecords().stream()
                     .filter(rec -> rec.getDescription().contains(finalLine))
-                    .count() + 1) + "]";
+                    .count() + 1));
         }
         aAssert(line, waitSupplier, action);
     }
@@ -123,26 +123,27 @@ public final class AsyncAssert {
                         rec.setException(assertionError);
                     } catch (Throwable ex) {
                         rec.setSuccess(false);
-                        AssertionError error =
-                                new AssertionError("Execution Exception! "
-                                        + ex.toString() + ex.getMessage());
+                        AssertionError error = new AssertionError(
+                                String.format("Execution Exception! %s(%s)",
+                                        ex.toString(), ex.getMessage()));
                         ex.printStackTrace();
                         error.setStackTrace(ex.getStackTrace());
                         rec.setException(error);
-                    } finally {
-                        rec.setComplete(true);
                     }
                 });
     }
 
     /**
      * id gen.
-     * @param result - g
+     * @param result - id of current test.
      * @return text.
      */
     protected static String idGenerator(final ITestResult result) {
-        return result.getInstance().toString() + "."
-                + result.getName() + "(" + result.getParameters() + ")";
+        return String.format("%s.%s(%s)",
+                result.getInstance().toString(),
+                result.getName(),
+                result.getParameters());
+
     }
 
     /**
@@ -161,15 +162,14 @@ public final class AsyncAssert {
                 return waitSupplier.get();
             } catch (Exception ex) {
                 rec.setSuccess(false);
-                AssertionError error =
-                        new AssertionError("Unhandled Wait Exception! "
-                                + ex.toString() + ex.getMessage());
+                String errorText = String.format(
+                        "Unhandled Wait Exception! %s(%s) for %s.",
+                        ex.toString(), ex.getMessage(), rec.getTestId());
+                AssertionError error = new AssertionError(errorText);
                 ex.printStackTrace();
                 error.setStackTrace(ex.getStackTrace());
                 rec.setException(error);
-                throw new RuntimeException("Unhandled Wait Exception! "
-                        + ex.toString() + ex.getMessage() + "for "
-                        + rec.getTestId(), error);
+                throw new RuntimeException(errorText, error);
             }
         };
     }
