@@ -34,4 +34,15 @@ public class TestDataHelper {
         verifyDataIsPresent();
         return data -> Assert.assertEquals(data, expectedData, "Data not detected while expected!");
     }
+
+    public static boolean isAssertPresent(final String searchQuery) {
+        return AsyncAssert.getAssertRecords().stream().anyMatch(r -> r.getTestId().contains(searchQuery));
+    }
+
+    public static boolean isAssertStateSucess(final String searchQuery) {
+        return AsyncAssert.getAssertRecords().stream()
+                .filter(r -> r.getTestId().contains(searchQuery))
+                .map(r -> r.isSuccess())
+                .findFirst().get();
+    }
 }

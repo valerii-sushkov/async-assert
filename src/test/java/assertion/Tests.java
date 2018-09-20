@@ -4,8 +4,6 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.util.concurrent.TimeUnit;
-
 public class Tests {
 
     @Test
@@ -14,18 +12,12 @@ public class Tests {
                 TestDataHelper.waitAndGetStrData(5000, "response data"),
                 TestDataHelper.verifyDataEquals("response data"));
 
-        Assert.assertTrue(AsyncAssert.getAssertRecords().stream().anyMatch(r -> r.getTestId().contains("success")),
+        Assert.assertTrue(TestDataHelper.isAssertPresent("success"),
                 "No res in table after AAssert creation.");
-        Assert.assertTrue(!AsyncAssert.getAssertRecords().stream()
-                        .filter(r -> r.getTestId().contains("success"))
-                        .map(r -> r.isSuccess())
-                        .findFirst().get(),
+        Assert.assertTrue(!TestDataHelper.isAssertStateSucess("success"),
                 "Wait not complete but result already received!");
         uglyDelay(10000);
-        Assert.assertTrue(AsyncAssert.getAssertRecords().stream()
-                        .filter(r -> r.getTestId().contains("success"))
-                        .map(r -> r.isSuccess())
-                        .findFirst().get(),
+        Assert.assertTrue(TestDataHelper.isAssertStateSucess("success"),
                 "Wait complete but result not successful");
     }
 
@@ -35,12 +27,9 @@ public class Tests {
                 TestDataHelper.waitAndGetStrData(1000, "response data bad"),
                 TestDataHelper.verifyDataEquals("response data"));
         uglyDelay(5000);
-        Assert.assertTrue(AsyncAssert.getAssertRecords().stream().anyMatch(r -> r.getTestId().contains("fail")),
+        Assert.assertTrue(TestDataHelper.isAssertPresent("fail"),
                 "No res in table after AAssert creation.");
-        Assert.assertTrue(!AsyncAssert.getAssertRecords().stream()
-                        .filter(r -> r.getTestId().contains("fail"))
-                        .map(r -> r.isSuccess())
-                        .findFirst().get(),
+        Assert.assertTrue(!TestDataHelper.isAssertStateSucess("fail"),
                 "Wait complete but result not successful");
     }
 
