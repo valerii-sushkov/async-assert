@@ -12,6 +12,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <default.max.timeout>10</default.max.timeout>
+    <default.max.units>SECONDS</default.max.units>
   </properties>
 
   <build>
@@ -43,6 +45,10 @@
                 <value>assertion.AsyncAssertListener, assertion.TestAsyncListener</value>
               </property>
             </properties>
+            <systemPropertyVariables>
+              <async.max.timeout>${default.max.timeout}</async.max.timeout>
+              <async.max.units>${default.max.units}</async.max.units>
+            </systemPropertyVariables>
             <reportFormat>plain</reportFormat>
           </configuration>
         </plugin>

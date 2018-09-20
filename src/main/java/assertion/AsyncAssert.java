@@ -61,6 +61,13 @@ public final class AsyncAssert {
     private static long maxTimeout = MAX_MINUTES;
 
     /**
+     * Maximal time units before feature be interrupted
+     * during closing of executor.
+     * With default value.
+     */
+    private static TimeUnit maxTimeoutUnits = TimeUnit.MINUTES;
+
+    /**
      * No public constructor.
      */
     private AsyncAssert() {
@@ -143,11 +150,13 @@ public final class AsyncAssert {
      * @return text.
      */
     protected static String idGenerator(final ITestResult result) {
-        String params = result.getParameters() == null ? "" :
-                Arrays.asList(result.getParameters())
-                .stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(";"));
+        String params = "";
+        if (result.getParameters() != null) {
+            params = Arrays.asList(result.getParameters())
+                    .stream()
+                    .map(Object::toString)
+                    .collect(Collectors.joining(";"));
+        }
         return String.format("%s.%s(%s)",
                 result.getInstance().toString(),
                 result.getName(),
@@ -188,8 +197,29 @@ public final class AsyncAssert {
     protected static void executorShutDown() {
         LOGGER.info("Close Assert thread executor.");
         executor.shutdown();
+        long timeOut = maxTimeout;
+        TimeUnit timeUnit = maxTimeoutUnits;
+        if (maxTimeout == MAX_MINUTES
+                && maxTimeoutUnits.equals(TimeUnit.MINUTES)) {
+            String timeOutProperty = System.getProperty("async.max.timeout");
+            if (timeOutProperty != null && !timeOutProperty.isEmpty()) {
+                timeOut = Long.valueOf(timeOutProperty);
+            }
+            String timeUnitsProperty = System.getProperty("async.max.units");
+            if (timeUnitsProperty != null && !timeUnitsProperty.isEmpty()) {
+                try {
+                    timeUnit = TimeUnit.valueOf(timeUnitsProperty);
+                } catch (IllegalArgumentException e) {
+                    LOGGER.severe("Async max timeout config is not correct. "
+                            + "Use default.");
+                }
+            }
+        }
+        LOGGER.info(String.format("Wait for all tasks completed "
+                        + "with max timeout %s %s",
+                timeOut, timeUnit.name()));
         try {
-            executor.awaitTermination(maxTimeout, TimeUnit.MINUTES);
+            executor.awaitTermination(timeOut, timeUnit);
         } catch (InterruptedException e) {
             throw new RuntimeException("Error closing Assert executor!", e);
         }
@@ -213,8 +243,11 @@ public final class AsyncAssert {
      * during closing of executor.
      * Should be ~equals than expected max possible wait for condition.
      * @param maxTimeOut - max time out in minutes.
+     * @param timeUnit - time units of max wait.
      */
-    public static void setMaxTimeout(final long maxTimeOut) {
+    public static void setMaxTimeout(final long maxTimeOut,
+                                     final TimeUnit timeUnit) {
         maxTimeout = maxTimeOut;
+        maxTimeoutUnits = timeUnit;
     }
 }
